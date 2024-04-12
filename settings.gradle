@@ -12,11 +12,13 @@ include ":app:test_plugins"
 include "example-plugins"
 include "example-plugins:custom-data-and-widget"
 include "example-plugins:custom-theme"
+include "example-plugins:playing-with-javafx"
 include "integ_test"
 include ":plugins:base"
 include ":plugins:cameraserver"
 include ":plugins:networktables"
 include ":plugins:powerup"
+
 
 rootProject.children.each {
     setUpChildProject(it)
