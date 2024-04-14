@@ -6,12 +6,19 @@ import edu.wpi.first.shuffleboard.api.widget.SimpleAnnotatedWidget;
 
 import com.example.simplewidget.data.Point2D;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.chart.PieChart;
+import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
 @Description(
-    name = "Testing My Widget",
+    name = "Circle UI",
     dataTypes = Point2D.class,
     summary = "I got trapped in gradle hell for days"
 )
@@ -20,24 +27,53 @@ public final class UiWidget extends SimpleAnnotatedWidget<Point2D> {
 
   @FXML
   private Pane root;
-  @FXML
-  private Label xCoordinateView;
 
   @FXML
-  private Label yCoordinateView;
+  private ObservableList<PieChart.Data> voltageAllocation = FXCollections.observableArrayList(
+          new PieChart.Data("Default", 50),
+          new PieChart.Data("Default2", 25)
+  );
+
+  private double oldRootWidth, oldRootHeight;
+
+  @FXML
+  private PieChart piechart = new PieChart();
+
 
   @FXML
   private void initialize() {
+    oldRootHeight = root.getHeight();
+    oldRootWidth = root.getWidth();
 
-    // Bind the text in the labels to the data
-    // If you are unfamiliar with the -> notation used here, read the Oracle tutorial on lambda expressions:
-    // https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html
-//    xCoordinateView.textProperty().bind(dataOrDefault.map(point -> point.getX()).map(x -> "X: " + x));
-//    yCoordinateView.textProperty().bind(dataOrDefault.map(point -> point.getY()).map(y -> "Y: " + y));
+    piechart.setData(voltageAllocation);
+    piechart.setClockwise(true);
+    piechart.setLabelLineLength(50);
+    piechart.setLabelsVisible(true);
+
+    TextField textField = new TextField();
+
+    root.getChildren().add(textField);
+
+    root.widthProperty().addListener((observable, oldValue, newValue) -> {
+       piechart.resize(
+               piechart.getWidth()*(newValue.doubleValue()/oldRootWidth),
+                     piechart.getHeight());
+       oldRootWidth = newValue.doubleValue();
+       textField.setText(newValue.toString());
+    });
+
+    root.heightProperty().addListener((observable, oldValue, newValue) -> {
+      piechart.resize(
+              piechart.getWidth(),
+              piechart.getHeight()*(newValue.doubleValue()/oldRootWidth));
+      oldRootHeight = newValue.doubleValue();
+    });
   }
 
   @Override
   public Pane getView() {
     return root;
   }
+
+
 }

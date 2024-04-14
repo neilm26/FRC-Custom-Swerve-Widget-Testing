@@ -30,8 +30,8 @@ public final class SimplePointWidget extends SimpleAnnotatedWidget<Point2D> {
     // Bind the text in the labels to the data
     // If you are unfamiliar with the -> notation used here, read the Oracle tutorial on lambda expressions:
     // https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html
-    xCoordinateView.textProperty().bind(dataOrDefault.map(point -> point.getX()).map(x -> "X: " + x));
-    yCoordinateView.textProperty().bind(dataOrDefault.map(point -> point.getY()).map(y -> "Y: " + y));
+    xCoordinateView.textProperty().bind(dataOrDefault.map(Point2D::getX).map(x -> "X: " + x));
+    yCoordinateView.textProperty().bind(dataOrDefault.map(Point2D::getY).map(y -> "Y: " + y));
   }
 
   @Override
